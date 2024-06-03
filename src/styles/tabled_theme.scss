@@ -1,0 +1,128 @@
+
+// This is the native caption element.
+table caption,
+// .table-caption is the cloned caption element shown below the table.
+.tabled__caption {
+  padding-block: var(--tabled-v-space-4xs);
+  border-bottom: 1px solid var(--tabled-color-150);
+  background: var(--tabled-color-white);
+  z-index: 4;
+  position: relative;
+  font-weight: 600;
+  text-align: left;
+}
+
+table {
+  border-collapse: collapse;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  table-layout: fixed;
+  text-align: left;
+  overflow: hidden;
+  scrollbar-color: var(--tabled-color-600) var(--tabled-color-150);
+
+  &:-webkit-scrollbar-thumb {
+    background-color: var(--tabled-color-600);
+  }
+
+  &:-webkit-scrollbar-track {
+    background-color: var(--tabled-color-150);
+  }
+
+  th,
+  td {
+    border-bottom: 0;
+    padding: var(--tabled-v-space-4xs);
+
+    a:not(.section-heading) {
+      padding: 0;
+
+      &:hover {
+        background: none;
+      }
+    }
+  }
+
+  th {
+    background-color: var(--tabled-color-500);
+    color: var(--tabled-color-white);
+    border-right: 8px solid var(--tabled-color-600);
+  }
+
+  thead tr {
+    background-color: var(--tabled-color-600);
+    border: 1px solid var(--tabled-color-600);
+    border-bottom: 8px solid var(--tabled-color-700);
+    padding: var(--tabled-v-space-4xs) 0 0;
+
+    @media (min-width: 1024px) {
+      padding: var(--tabled-v-space-3xs) var(--tabled-v-space-2xs);
+    }
+
+    th {
+      background: none;
+      border-right: 0;
+    }
+  }
+
+  tbody tr {
+    background-color: var(--tabled-color-150);
+    border: 1px solid var(--line-light);
+    border-top: none;
+    padding: var(--tabled-v-space-3xs) var(--tabled-v-space-2xs);
+    vertical-align: top;
+
+    .layout--light .link-collection--table & {
+      background-color: var(--color-white);
+    }
+
+    .link-default-desc {
+      color: var(--tabled-color-black);
+    }
+
+    &:nth-child(even) {
+      background-color: var(--color-white);
+    }
+  }
+
+
+  // Set all table cells/descriptions text color to black.
+  tbody td,
+  tbody .link-default-desc {
+    color: var(--tabled-color-black);
+  }
+
+  tbody p {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+
+table.tabled--stacked {
+  th {
+    padding: var(--tabled-v-space-2xs);
+  }
+
+  td {
+    padding: var(--tabled-v-space-3xs);
+  }
+
+
+  @media (max-width: 1024px) {
+    tr {
+      border-left: 0;
+      border-right: 0;
+
+      &:nth-child(even) {
+        background-color: var(--tabled-color-150);
+      }
+    }
+
+
+    td {
+      padding: 0;
+      margin: var(--tabled-v-space-3xs);
+    }
+  }
+}

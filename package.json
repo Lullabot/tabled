@@ -1,0 +1,32 @@
+{
+  "devDependencies": {
+    "sass": "^1.71.1",
+    "typescript": "^5.3.3",
+    "uglify-js": "^3.17.4"
+  },
+  "name": "tabled",
+  "description": "An HTML table plugin designed to enhance the usability and responsiveness of tables on web pages on an accesible way.",
+  "version": "1.0.0",
+  "main": "./dist/tabled.min.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "start": "parcel docs/examples.html",
+    "tsc": "tsc",
+    "uglify": "uglifyjs --compress --mangle -o ./dist/tabled.min.js -- ./dist/tabled.js",
+    "sass-themes": "sass ./src/styles/tabled_theme.scss ./dist/theme.css --style compressed",
+    "sass": "sass ./src/styles/tabled_core.scss ./dist/styles.css --style compressed",
+    "build": "npm run tsc && npm run sass && npm run sass-themes && npm run uglify"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Javi-er/tabled.git"
+  },
+  "author": "javi-er",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/Javi-er/tabled/issues"
+  },
+  "homepage": "https://github.com/Javi-er/tabled#readme"
+}
