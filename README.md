@@ -71,33 +71,15 @@ Tabled is licensed under the GPL (GNU General Public License), which means it's 
 
 ## Examples
 
-**Calling tabled from a Drupal JS file**
-
-This will render every table using Tabled, exept by those specifically defined as "stacked" and also excluding layout builder tables.
+This will render every table using Tabled, and fall back to add the class `tabled-stacked` for tables that don't meed the requirements.
 
 ```
-((Drupal, once) => {
-  /**
-   * Initialize the behavior.
-   *
-   * @type {Drupal~behavior}
-   *
-   * @prop {Drupal~behaviorAttach} attach
-   *   Attach context and settings for the plugin.
-   */
-  Drupal.behaviors.tabled = {
-    tableCount: 0,
-    attach: function (context) {
-      let index = Drupal.behaviors.tabled.tableCount;
-      const tables = once('tabled',
-      'table:not([data-drupal-selector="edit-settings-selection-table"])'
-      , context);
-      const options = { failClass: 'table--stacked' };
+  (function () {
+
+      const tables = document.querySelectorAll('table');
+
       tables.forEach((table) => {
-      	new Tabled(table, index++, options);
+        new Tabled({ table: table, failClass: 'tabled--stacked' });
       });
-      Drupal.behaviors.tabled.tableCount = index;
-    },
-  };
-})(Drupal, once);
+    })();
 ```

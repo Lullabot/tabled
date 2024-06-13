@@ -108,12 +108,18 @@ table.tabled--stacked {
     padding: var(--tabled-v-space-3xs);
   }
 
+  th, td {
+    &:before {
+      font-weight: 600;
+    }
+  }
+
 
   @media (max-width: 1024px) {
     tr {
       border-left: 0;
       border-right: 0;
-
+      background-color: var(--color-white);
       &:nth-child(even) {
         background-color: var(--tabled-color-150);
       }
