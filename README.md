@@ -15,7 +15,7 @@ https://github.com/Javi-er/tabled/assets/141685/1b60f8de-a8a9-47ec-a115-c2ffb467
 
 
 ## Live demo
-https://html-preview.github.io/?url=https://github.com/Javi-er/tabled/blob/main/docs/examples.html
+https://html-preview.github.io/?url=https://github.com/Lullabot/tabled/blob/main/docs/examples.html
 
 ## Features
 There are two render modes available, the default **"data table"** style which will add a scrollbar to the table and controls for navigating it. It uses button elements and native browser scrolling, it can be controlled with the keyboard and it's correctly described on accessibility API like a screen reader.
