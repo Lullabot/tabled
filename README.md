@@ -73,13 +73,13 @@ Tabled is licensed under the GPL (GNU General Public License), which means it's 
 
 This will render every table using Tabled, and fall back to add the class `tabled-stacked` for tables that don't meed the requirements.
 
-```
-  (function () {
+```js
+(function () {
 
-      const tables = document.querySelectorAll('table');
+  const tables = document.querySelectorAll('table');
 
-      tables.forEach((table) => {
-        new Tabled({ table: table, failClass: 'tabled--stacked' });
-      });
-    })();
+  tables.forEach((table) => {
+    new Tabled({ table: table, failClass: 'tabled--stacked' });
+  });
+})();
 ```
