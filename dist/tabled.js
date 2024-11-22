@@ -117,7 +117,7 @@ class Tabled {
         if (direction == "next") {
             for (let i = 0; i < columns.length; i++) {
                 let columnLeft = columns[i].getClientRects()[0].left;
-                currentLeft = Math.floor(columnLeft - containerLeft);
+                currentLeft = columnLeft - containerLeft;
                 if (currentLeft > 1) {
                     scrollToPosition = columns[i].offsetLeft;
                     break;
@@ -127,7 +127,7 @@ class Tabled {
         else if (direction == "previous") {
             for (let i = columns.length - 1; i > 0; i--) {
                 let columnLeft = columns[i].getClientRects()[0].left;
-                currentLeft = Math.ceil(columnLeft - containerLeft);
+                currentLeft = columnLeft - containerLeft;
                 if (currentLeft < 0) {
                     scrollToPosition = columns[i].offsetLeft;
                     break;
@@ -163,18 +163,20 @@ class Tabled {
         const caption = table.querySelector("caption");
         if (caption) {
             caption.classList.add("visually-hidden");
-            const captionDiv = document.createElement("div");
-            captionDiv.classList.add(Selectors.caption);
-            if (options.captionSide === "bottom") {
-                captionDiv.classList.add("tabled__caption--bottom");
-            }
-            captionDiv.innerHTML = caption.innerText;
-            captionDiv.setAttribute("aria-hidden", "true");
-            const container = this.getContainer(table);
-            if (container) {
-                options.captionSide === "bottom"
-                    ? container.appendChild(captionDiv)
-                    : container.prepend(captionDiv);
+            if (!caption.classList.contains("hide-caption")) {
+                const captionDiv = document.createElement("div");
+                captionDiv.classList.add(Selectors.caption);
+                if (options.captionSide === "bottom") {
+                    captionDiv.classList.add("tabled__caption--bottom");
+                }
+                captionDiv.innerHTML = caption.innerText;
+                captionDiv.setAttribute("aria-hidden", "true");
+                const container = this.getContainer(table);
+                if (container) {
+                    options.captionSide === "bottom"
+                        ? container.appendChild(captionDiv)
+                        : container.prepend(captionDiv);
+                }
             }
         }
     }

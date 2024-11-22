@@ -315,22 +315,23 @@ class Tabled {
 
     if (caption) {
       caption.classList.add("visually-hidden");
+      if (!caption.classList.contains("hide-caption")) {
+        const captionDiv = document.createElement("div");
+        captionDiv.classList.add(Selectors.caption);
 
-      const captionDiv = document.createElement("div");
-      captionDiv.classList.add(Selectors.caption);
+        if (options.captionSide === "bottom") {
+          captionDiv.classList.add("tabled__caption--bottom");
+        }
 
-      if (options.captionSide === "bottom") {
-        captionDiv.classList.add("tabled__caption--bottom");
-      }
+        captionDiv.innerHTML = caption.innerText;
+        captionDiv.setAttribute("aria-hidden", "true");
+        const container = this.getContainer(table);
 
-      captionDiv.innerHTML = caption.innerText;
-      captionDiv.setAttribute("aria-hidden", "true");
-      const container = this.getContainer(table);
-
-      if (container) {
-        options.captionSide === "bottom"
-          ? container.appendChild(captionDiv)
-          : container.prepend(captionDiv);
+        if (container) {
+          options.captionSide === "bottom"
+            ? container.appendChild(captionDiv)
+            : container.prepend(captionDiv);
+        }
       }
     }
   }
