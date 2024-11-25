@@ -21,12 +21,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Javi-er/tabled.git"
+    "url": "git+https://github.com/Lullabot/tabled"
   },
-  "author": "javi-er",
-  "license": "GPL-3.0-or-later",
+  "author": "Lullabot",
+  "contributors": [
+    "javi-er"
+  ],
+  "license": "GPL-2.0-or-later",
   "bugs": {
-    "url": "https://github.com/Javi-er/tabled/issues"
+    "url": "https://github.com/Lullabot/tabled/issues"
   },
-  "homepage": "https://github.com/Javi-er/tabled#readme"
+  "homepage": "https://github.com/Lullabot/tabled#readme"
 }
