@@ -37,8 +37,8 @@ $breakpoint-large: 1024px;
   position: absolute !important;
   overflow: hidden;
   clip: rect(1px, 1px, 1px, 1px);
-  width: 1px;
-  height: 1px;
+  inline-size: 1px;
+  block-size: 1px;
   word-wrap: normal;
 }
 
@@ -48,16 +48,16 @@ $breakpoint-large: 1024px;
 
 .tabled {
   position: relative;
-  padding-top: var(--tabled-v-space-4xs);
+  padding-block-start: var(--tabled-v-space-4xs);
   overflow: hidden;
 
   &:before,
   &:after {
     content: "";
     position: absolute;
-    top: var(--tabled-v-space-s);
-    width: 10%;
-    height: 100%;
+    inset-block-start: var(--tabled-v-space-s);
+    inline-size: 10%;
+    block-size: 100%;
     background: transparent;
     z-index: 1;
     will-change: opacity ;
@@ -68,19 +68,20 @@ $breakpoint-large: 1024px;
   }
 
   &:before {
-    left: 0;
+    inset-inline-start: 0;
     background: linear-gradient(90deg, rgba(7, 23, 46, 0.1), rgba(0, 0, 0, 0));
   }
 
   &:after {
-    right: 0;
+    inset-inline-end: 0;
     background: linear-gradient(-90deg, rgba(7, 23, 46, 0.1), rgba(0, 0, 0, 0));
   }
 
   .tabled__navigation {
+    display: none;
     position: relative;
-    height: var(--tabled-v-space-xs);
-    width: 100%;
+    block-size: var(--tabled-v-space-xs);
+    inline-size: 100%;
     padding-block: var(--tabled-v-space-4xs);
     background: var(--tabled-color-white);
     z-index: 4;
@@ -88,12 +89,11 @@ $breakpoint-large: 1024px;
 
   .tabled__previous,
   .tabled__next {
-    display: none;
     position: absolute;
-    top: var(--tabled-v-space-4xs);
-    right: 0;
-    width: var(--tabled-v-space-xs);
-    height: var(--tabled-v-space-xs);
+    inset-block-start: var(--tabled-v-space-4xs);
+    inset-inline-end: 0;
+    inline-size: var(--tabled-v-space-xs);
+    block-size: var(--tabled-v-space-xs);
     background: var(--tabled-color-white);
     border: 2px solid var(--tabled-color-border);
     padding: 0;
@@ -127,8 +127,7 @@ $breakpoint-large: 1024px;
 
   &.tabled--fade-left,
   &.tabled--fade-right {
-    .tabled__previous,
-    .tabled__next {
+    .tabled__navigation {
       display: block;
     }
 
@@ -139,7 +138,7 @@ $breakpoint-large: 1024px;
   }
 
   .tabled__previous {
-    right: var(--tabled-v-space-s);
+    inset-inline-end: var(--tabled-v-space-s);
 
     &:before {
       font-family: Arial, Helvetica, sans-serif;
@@ -186,9 +185,9 @@ $breakpoint-large: 1024px;
 }
 
 table.tabled__table {
-  height: auto;
-  width: auto;
-  min-width: 100%;
+  block-size: auto;
+  inline-size: auto;
+  min-inline-size: 100%;
   margin: 0;
   border-spacing: 0;
 
@@ -201,15 +200,15 @@ table.tabled__table {
 
   th,
   td {
-    min-width: var(--tabled-column-min-width);
+    min-inline-size: var(--tabled-column-min-width);
   }
 
   .tabled__column--large {
-    min-width: var(--tabled-column-min-width-large);
+    min-inline-size: var(--tabled-column-min-width-large);
   }
 
   .tabled__column--small {
-    min-width: var(--tabled-column-min-width-small);
+    min-inline-size: var(--tabled-column-min-width-small);
   }
 }
 
@@ -220,27 +219,27 @@ table.tabled__table {
     display: flex;
     flex-flow: column wrap;
 
-    @media (min-width: $breakpoint-large) {
+    @media (min-inline-size: $breakpoint-large) {
       display: table-cell;
     }
 
     &:before {
       display: block;
       content: attr(data-label);
-      @media (min-width: $breakpoint-large) {
+      @media (min-inline-size: $breakpoint-large) {
         display: none;
       }
     }
   }
 
   tr {
-    @media (min-width: $breakpoint-large) {
+    @media (min-inline-size: $breakpoint-large) {
       display: table-row;
     }
   }
 
   thead th {
-    @media (max-width: $breakpoint-large) {
+    @media (max-inline-size: $breakpoint-large) {
       @include visually-hidden;
       padding: 0;
     }
