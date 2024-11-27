@@ -56,7 +56,7 @@ table {
     border-block-end: 8px solid var(--tabled-color-700);
     padding: var(--tabled-v-space-4xs) 0 0;
 
-    @media (min-inline-size: 1024px) {
+    @media (min-width: 1024px) {
       padding: var(--tabled-v-space-3xs) var(--tabled-v-space-2xs);
     }
 
@@ -115,7 +115,7 @@ table.tabled--stacked {
   }
 
 
-  @media (max-inline-size: 1024px) {
+  @media (max-width: 1024px) {
     tr {
       border-inline-start: 0;
       border-inline-end: 0;
