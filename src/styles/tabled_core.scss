@@ -219,27 +219,27 @@ table.tabled__table {
     display: flex;
     flex-flow: column wrap;
 
-    @media (min-inline-size: $breakpoint-large) {
+    @media (min-width: $breakpoint-large) {
       display: table-cell;
     }
 
     &:before {
       display: block;
       content: attr(data-label);
-      @media (min-inline-size: $breakpoint-large) {
+      @media (min-width: $breakpoint-large) {
         display: none;
       }
     }
   }
 
   tr {
-    @media (min-inline-size: $breakpoint-large) {
+    @media (min-width: $breakpoint-large) {
       display: table-row;
     }
   }
 
   thead th {
-    @media (max-inline-size: $breakpoint-large) {
+    @media (max-width: $breakpoint-large) {
       @include visually-hidden;
       padding: 0;
     }
