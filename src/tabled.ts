@@ -214,7 +214,7 @@ class Tabled {
       scrollWidth: number = wrapper.scrollWidth;
 
     // If there is less than a pixel of difference between the table
-    if (scrollWidth - wrapper.scrollLeft - width < 1) {
+    if (scrollWidth - wrapper.scrollLeft - width <= 1) {
       container.classList.remove(Selectors.fadeRight);
       nextButton.setAttribute("disabled", "disabled");
     } else {
