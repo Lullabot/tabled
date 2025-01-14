@@ -96,7 +96,7 @@ class Tabled {
             previousButton.setAttribute("disabled", "disabled");
         }
         const width = wrapper.offsetWidth, scrollWidth = wrapper.scrollWidth;
-        if (scrollWidth - wrapper.scrollLeft - width < 1) {
+        if (scrollWidth - wrapper.scrollLeft - width <= 1) {
             container.classList.remove(Selectors.fadeRight);
             nextButton.setAttribute("disabled", "disabled");
         }
