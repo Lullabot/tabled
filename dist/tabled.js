@@ -61,14 +61,19 @@ class Tabled {
     }
     adjustColumnsWidth(options) {
         var _a, _b;
-        const characterThresholdLarge = (_a = options.characterThresholdLarge) !== null && _a !== void 0 ? _a : 50;
-        const characterThresholdSmall = (_b = options.characterThresholdSmall) !== null && _b !== void 0 ? _b : 8;
+        const BR_RE = /<br\s*\/?>/gi;
+        const HTML_RE = /<[^>]*>/g;
+        const characterThresholdLarge = (_a = options.characterThresholdLarge) !== null && _a !== void 0 ? _a : 30;
+        const characterThresholdSmall = (_b = options.characterThresholdSmall) !== null && _b !== void 0 ? _b : 10;
         for (let row of options.table.rows) {
             Array.from(row.cells).forEach((cell) => {
-                if (cell.innerText.length > characterThresholdLarge) {
+                const parts = cell.innerHTML.split(BR_RE).map(p => p.replace(HTML_RE, "").trim());
+                const isLong = parts.some(p => p.length > characterThresholdLarge);
+                const isShort = parts.every(p => p.length <= characterThresholdSmall);
+                if (isLong) {
                     cell.classList.add(Selectors.columnLarge);
                 }
-                else if (cell.innerText.length <= characterThresholdSmall) {
+                else if (isShort) {
                     cell.classList.add(Selectors.columnSmall);
                 }
             });
