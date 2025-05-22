@@ -164,7 +164,7 @@ class Tabled {
 
         // Then check if any of the parts are longer than the large character threshold.
         const isLong = parts.some(p => p.length > characterThresholdLarge);
-        // Then check if all of the parts are shorter than the character threshold.
+        // Then check if all of the parts are shorter than the small character threshold.
         const isShort = parts.every(p => p.length <= characterThresholdSmall);
 
         if (isLong) {
