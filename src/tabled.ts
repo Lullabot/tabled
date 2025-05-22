@@ -162,7 +162,7 @@ class Tabled {
         // and remove the HTML tags.
         const parts = cell.innerHTML.split(BR_RE).map(p => p.replace(HTML_RE, "").trim());
 
-        // Then check if any of the parts are longer than the character threshold.
+        // Then check if any of the parts are longer than the large character threshold.
         const isLong = parts.some(p => p.length > characterThresholdLarge);
         // Then check if all of the parts are shorter than the character threshold.
         const isShort = parts.every(p => p.length <= characterThresholdSmall);
