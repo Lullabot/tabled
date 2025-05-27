@@ -144,21 +144,32 @@ class Tabled {
 
   /**
    * Adjust column widths for cells that can have plenty of content by looking
-   * at the cell height.
+   * at the content length.
    *
    * @param {TabledOptions} options
    */
   private adjustColumnsWidth(options: TabledOptions) {
 
-    const characterThresholdLarge = options.characterThresholdLarge ?? 50;
-    const characterThresholdSmall = options.characterThresholdSmall ?? 8;
+    const BR_RE = /<br\s*\/?>/gi;
+    const HTML_RE = /<[^>]*>/g;
+    const characterThresholdLarge = options.characterThresholdLarge ?? 30;
+    const characterThresholdSmall = options.characterThresholdSmall ?? 10;
 
     for (let row of options.table.rows) {
       Array.from(row.cells).forEach((cell) => {
-        // Check if there are cells that are taller than the threshold
-        if (cell.innerText.length > characterThresholdLarge) {
+
+        // First split the cell content by <br> tags if there are any,
+        // and remove the HTML tags.
+        const parts = cell.innerHTML.split(BR_RE).map(p => p.replace(HTML_RE, "").trim());
+
+        // Then check if any of the parts are longer than the large character threshold.
+        const isLong = parts.some(p => p.length > characterThresholdLarge);
+        // Then check if all of the parts are shorter than the small character threshold.
+        const isShort = parts.every(p => p.length <= characterThresholdSmall);
+
+        if (isLong) {
           cell.classList.add(Selectors.columnLarge);
-        } else if (cell.innerText.length <= characterThresholdSmall) {
+        } else if (isShort) {
           cell.classList.add(Selectors.columnSmall);
         }
       });
