@@ -260,7 +260,7 @@ class Tabled {
     if (direction == "next") {
       for (let i = 0; i < columns.length; i++) {
         let columnLeft = columns[i].getClientRects()[0].left;
-        currentLeft = columnLeft - containerLeft;
+        currentLeft = Math.floor(columnLeft - containerLeft);
         if (currentLeft > 1) {
           scrollToPosition = columns[i].offsetLeft;
           break;
@@ -270,7 +270,7 @@ class Tabled {
       for (let i = columns.length - 1; i > 0; i--) {
         // Get the left position of each column
         let columnLeft: number = columns[i].getClientRects()[0].left;
-        currentLeft = columnLeft - containerLeft;
+        currentLeft = Math.ceil(columnLeft - containerLeft);
 
         if (currentLeft < 0) {
           scrollToPosition = columns[i].offsetLeft;
