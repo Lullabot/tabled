@@ -54,6 +54,19 @@ enum Selectors {
   caption = "tabled__caption",
 }
 
+const ALLOWED_INLINE_TAGS = new Set([
+  'A','ABBR','B','BR','CITE','CODE','EM','I','IMG',
+  'Q','SMALL','SPAN','STRONG','SUB','SUP','SVG','TIME','U',
+]);
+
+function sanitizeHTML(html: string, allowed: Set<string> = ALLOWED_INLINE_TAGS): string {
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  doc.body.querySelectorAll('*').forEach(el => {
+    if (!allowed.has(el.tagName)) el.replaceWith(...el.childNodes);
+  });
+  return doc.body.innerHTML;
+}
+
 /**
  * Represents a Tabled instance that augments a table with additional functionality.
  */
@@ -334,7 +347,7 @@ class Tabled {
           captionDiv.classList.add("tabled__caption--bottom");
         }
 
-        captionDiv.innerHTML = caption.innerText;
+        captionDiv.innerHTML = sanitizeHTML(caption.innerHTML);
         captionDiv.setAttribute("aria-hidden", "true");
         const container = this.getContainer(table);
 
