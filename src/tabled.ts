@@ -163,7 +163,7 @@ class Tabled {
    */
   private adjustColumnsWidth(options: TabledOptions) {
 
-    const BR_RE = /<br\s*\/?>/gi;
+    const BLOCK_BR_RE = /<br\s*\/?>|<\/?(?:p|div|li|ul|ol|blockquote|h[1-6])\b[^>]*>/gi;
     const HTML_RE = /<[^>]*>/g;
     const characterThresholdLarge = options.characterThresholdLarge ?? 30;
     const characterThresholdSmall = options.characterThresholdSmall ?? 10;
@@ -171,9 +171,7 @@ class Tabled {
     for (let row of options.table.rows) {
       Array.from(row.cells).forEach((cell) => {
 
-        // First split the cell content by <br> tags if there are any,
-        // and remove the HTML tags.
-        const parts = cell.innerHTML.split(BR_RE).map(p => p.replace(HTML_RE, "").trim());
+        const parts = cell.innerHTML.split(BLOCK_BR_RE).map(p => p.replace(HTML_RE, "").trim()).filter(p => p.length > 0);
 
         // Then check if any of the parts are longer than the large character threshold.
         const isLong = parts.some(p => p.length > characterThresholdLarge);

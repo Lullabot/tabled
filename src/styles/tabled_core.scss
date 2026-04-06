@@ -194,10 +194,6 @@ table.tabled__table {
   position: relative;
   table-layout: fixed;
 
-  th {
-    text-transform: capitalize;
-  }
-
   th,
   td {
     min-inline-size: var(--tabled-column-min-width);
