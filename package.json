@@ -4,13 +4,19 @@
     "typescript": "^6.0.0",
     "uglify-js": "^3.17.4"
   },
-  "name": "tabled",
-  "description": "An HTML table plugin designed to enhance the usability and responsiveness of tables on web pages on an accesible way.",
+  "name": "@lullabot/tabled",
+  "description": "An HTML table plugin designed to enhance the usability and responsiveness of tables on web pages on an accessible way.",
   "version": "1.0.6",
   "main": "./dist/tabled.min.js",
-  "directories": {
-    "doc": "docs"
-  },
+  "module": "./dist/tabled.js",
+  "types": "./dist/tabled.d.ts",
+  "files": [
+    "dist/tabled.js",
+    "dist/tabled.min.js",
+    "dist/tabled.d.ts",
+    "dist/styles.css",
+    "dist/theme.css"
+  ],
   "scripts": {
     "start": "parcel docs/examples.html",
     "tsc": "tsc",
@@ -21,7 +27,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Lullabot/tabled"
+    "url": "git+https://github.com/Lullabot/tabled.git"
   },
   "author": "Lullabot",
   "contributors": [
