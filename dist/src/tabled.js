@@ -61,13 +61,13 @@ class Tabled {
     }
     adjustColumnsWidth(options) {
         var _a, _b;
-        const BR_RE = /<br\s*\/?>/gi;
+        const BLOCK_BR_RE = /<br\s*\/?>|<\/?(?:p|div|li|ul|ol|blockquote|h[1-6])\b[^>]*>/gi;
         const HTML_RE = /<[^>]*>/g;
         const characterThresholdLarge = (_a = options.characterThresholdLarge) !== null && _a !== void 0 ? _a : 30;
         const characterThresholdSmall = (_b = options.characterThresholdSmall) !== null && _b !== void 0 ? _b : 10;
         for (let row of options.table.rows) {
             Array.from(row.cells).forEach((cell) => {
-                const parts = cell.innerHTML.split(BR_RE).map(p => p.replace(HTML_RE, "").trim());
+                const parts = cell.innerHTML.split(BLOCK_BR_RE).map(p => p.replace(HTML_RE, "").trim()).filter(p => p.length > 0);
                 const isLong = parts.some(p => p.length > characterThresholdLarge);
                 const isShort = parts.every(p => p.length <= characterThresholdSmall);
                 if (isLong) {
