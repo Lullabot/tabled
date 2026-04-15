@@ -17,11 +17,13 @@ var Selectors;
 const ALLOWED_INLINE_TAGS = new Set([
     'A', 'ABBR', 'B', 'BR', 'CITE', 'CODE', 'EM', 'I', 'IMG',
     'Q', 'SMALL', 'SPAN', 'STRONG', 'SUB', 'SUP', 'SVG', 'TIME', 'U',
+    'CIRCLE', 'DEFS', 'ELLIPSE', 'G', 'LINE', 'PATH', 'POLYGON',
+    'POLYLINE', 'RECT', 'TEXT', 'TSPAN', 'USE',
 ]);
 function sanitizeHTML(html, allowed = ALLOWED_INLINE_TAGS) {
     const doc = new DOMParser().parseFromString(html, 'text/html');
     doc.body.querySelectorAll('*').forEach(el => {
-        if (!allowed.has(el.tagName))
+        if (!allowed.has(el.tagName.toUpperCase()))
             el.replaceWith(...el.childNodes);
     });
     return doc.body.innerHTML;
