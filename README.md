@@ -66,6 +66,14 @@ You can include just `styles.css` to get the basic layout without the table styl
 We welcome contributions from the community to make Tabled even better. Whether it's reporting a bug, suggesting a feature, or contributing code, your help is appreciated.
 Questions or feedback about Tabled? Feel free to reach out to us via the issue tracker.
 
+Please use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) messages so releases can interpret them, for instance:
+
+```
+feat: allow provided config object to extend other configs
+
+BREAKING CHANGE: `extends` key in config file is now used for extending other config files
+```
+
 ## License
 Tabled is licensed under the GPL (GNU General Public License), which means it's open-source and free to use, modify, and distribute for both personal and commercial projects.
 
