@@ -6,7 +6,7 @@
   },
   "name": "@lullabot/tabled",
   "description": "An HTML table plugin designed to enhance the usability and responsiveness of tables on web pages on an accessible way.",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "main": "./dist/tabled.min.js",
   "module": "./dist/tabled.js",
   "types": "./dist/tabled.d.ts",
