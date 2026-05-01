@@ -6,7 +6,7 @@
   },
   "name": "@lullabot/tabled",
   "description": "An HTML table plugin designed to enhance the usability and responsiveness of tables on web pages on an accessible way.",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "main": "./dist/tabled.min.js",
   "module": "./dist/tabled.js",
   "types": "./dist/tabled.d.ts",
@@ -23,7 +23,8 @@
     "uglify": "uglifyjs --compress --mangle -o ./dist/tabled.min.js -- ./dist/tabled.js",
     "sass-themes": "sass ./src/styles/tabled_theme.scss ./dist/theme.css --style compressed",
     "sass": "sass ./src/styles/tabled_core.scss ./dist/styles.css --style compressed",
-    "build": "npm run tsc && npm run sass && npm run sass-themes && npm run uglify"
+    "build": "npm run tsc && npm run sass && npm run sass-themes && npm run uglify",
+    "prepack": "npm run build"
   },
   "repository": {
     "type": "git",
