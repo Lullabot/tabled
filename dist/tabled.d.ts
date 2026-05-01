@@ -20,6 +20,8 @@ declare enum Selectors {
     next = "tabled__next",
     caption = "tabled__caption"
 }
+declare const ALLOWED_INLINE_TAGS: Set<string>;
+declare function sanitizeHTML(html: string, allowed?: Set<string>): string;
 declare class Tabled {
     constructor(options: TabledOptions);
     private getWrapper;
