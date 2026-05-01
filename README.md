@@ -66,13 +66,28 @@ You can include just `styles.css` to get the basic layout without the table styl
 We welcome contributions from the community to make Tabled even better. Whether it's reporting a bug, suggesting a feature, or contributing code, your help is appreciated.
 Questions or feedback about Tabled? Feel free to reach out to us via the issue tracker.
 
-Please use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) messages so releases can interpret them, for instance:
+### Pull request guidelines
 
-```
-feat: allow provided config object to extend other configs
+Releases are automated via [release-please](https://github.com/googleapis/release-please), which reads commit messages on `main` to determine the next version and generate the changelog. To make this work, please follow these conventions when opening pull requests:
 
-BREAKING CHANGE: `extends` key in config file is now used for extending other config files
-```
+1. **Use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) syntax in the PR title.** The PR title becomes the commit message on `main` after squashing, so it is what release-please reads. Common prefixes:
+
+   - `feat:` — a new feature (triggers a minor version bump)
+   - `fix:` — a bug fix (triggers a patch version bump)
+   - `chore:`, `docs:`, `ci:`, `refactor:`, `test:` — no release
+   - Add `!` after the type or include `BREAKING CHANGE:` in the body for a major bump
+
+   Example:
+
+   ```
+   feat: allow provided config object to extend other configs
+
+   BREAKING CHANGE: `extends` key in config file is now used for extending other config files
+   ```
+
+2. **Merge with "Squash and merge".** This combines all the PR's commits into a single commit on `main` using the PR title as the commit message, which keeps the history clean and gives release-please exactly one conventional commit to interpret per PR.
+
+When a release-worthy PR is merged, release-please opens a `chore(main): release X.Y.Z` PR with the version bump and changelog updates. Merging that release PR triggers the npm publish workflow automatically.
 
 ## License
 Tabled is licensed under the GPL (GNU General Public License), which means it's open-source and free to use, modify, and distribute for both personal and commercial projects.
