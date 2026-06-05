@@ -1136,6 +1136,106 @@
     </tbody>
   </table>
 
+<h2>Table with custom controls</h2>
+<p>
+Wrap the table in a <code>.tabled</code> element and add your own previous/next
+buttons (using the <code>tabled__previous</code> and <code>tabled__next</code>
+classes). Tabled detects the existing markup, wires the buttons, and manages
+their disabled state instead of generating its own controls.
+</p>
+<pre class="pre--custom-controls"><code>&lt;div class="tabled"&gt;
+  &lt;div class="tabled__navigation"&gt;
+    &lt;button type="button" class="tabled__previous custom__previous" aria-label="Previous column"&gt;Previous&lt;/button&gt;
+    &lt;button type="button" class="tabled__next custom__next" aria-label="Next column"&gt;Next&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;table&gt;
+    ...
+  &lt;/table&gt;
+&lt;/div&gt;</code></pre>
+
+<style>
+  pre.pre--custom-controls {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+  .tabled .custom__navigation {
+    display: flex !important;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 1rem;
+  }
+  .tabled .custom__previous,
+  .tabled .custom__next {
+    position: initial;
+    inline-size: auto;
+    padding-inline: 1rem;
+    border-radius: 10px;
+  }
+  .tabled .custom__previous:before,
+  .tabled .custom__next:before {
+    display: none;
+  }
+</style>
+
+<div class="tabled">
+  <div class="tabled__navigation custom__navigation">
+    <button type="button" class="tabled__previous custom__previous" aria-label="Previous column">Previous</button>
+    <button type="button" class="tabled__next custom__next" aria-label="Next column">Next</button>
+  </div>
+  <table>
+    <caption>Animals around the world</caption>
+    <thead>
+      <tr>
+        <th>Animal</th>
+        <th>Group</th>
+        <th>Habitat</th>
+        <th>Diet</th>
+        <th>Lifespan</th>
+        <th>Region</th>
+        <th>Fun fact</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Elephant</td>
+        <td>Mammal</td>
+        <td>Savanna</td>
+        <td>Herbivore</td>
+        <td>60 years</td>
+        <td>Africa</td>
+        <td>Can recognise themselves in a mirror</td>
+      </tr>
+      <tr>
+        <td>Penguin</td>
+        <td>Bird</td>
+        <td>Coast</td>
+        <td>Carnivore</td>
+        <td>20 years</td>
+        <td>Antarctica</td>
+        <td>Cannot fly, but swims very well</td>
+      </tr>
+      <tr>
+        <td>Kangaroo</td>
+        <td>Mammal</td>
+        <td>Grassland</td>
+        <td>Herbivore</td>
+        <td>23 years</td>
+        <td>Australia</td>
+        <td>Carries its young in a pouch</td>
+      </tr>
+      <tr>
+        <td>Owl</td>
+        <td>Bird</td>
+        <td>Forest</td>
+        <td>Carnivore</td>
+        <td>15 years</td>
+        <td>Worldwide</td>
+        <td>Can turn its head around almost fully</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
 <h2>Stacked rows table</h2>
 <p>
 It will switch the table to "stacked" mode where each cell represents a row under the specified breakpoint (1024px).

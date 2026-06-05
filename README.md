@@ -56,6 +56,28 @@ The `Tabled` class will accept the following options:
 
 Also there are several CSS variables that can be overridden from your theme CSS, these include colors, spacing and column widths. The reference for these can be found at [tabled_core.scss](src/styles/tabled_core.scss).
 
+## Custom controls
+
+By default Tabled generates its own previous/next buttons. If you'd rather supply your own, wrap the table in a `.tabled` element and add buttons with the `tabled__previous` and `tabled__next` classes. When Tabled initializes a table that is already inside a `.tabled` element, it adopts the existing markup instead of generating its own: it reuses your container, navigation, and buttons, wiring up the click handlers and managing their disabled state. Only the structural pieces you don't provide are created.
+
+```html
+<div class="tabled">
+  <div class="tabled__navigation">
+    <button type="button" class="tabled__previous" aria-label="Previous column"></button>
+    <button type="button" class="tabled__next" aria-label="Next column"></button>
+  </div>
+  <table>
+    <!-- ... -->
+  </table>
+</div>
+```
+
+```js
+new Tabled({ table: document.querySelector('.tabled table') });
+```
+
+The `tabled__navigation` wrapper is optional, and you can provide just one of the two buttons; Tabled creates whatever is missing. Initialization itself is synchronous, the only asynchronous work happens afterwards via the scroll listener and resize observer that keep the fade and disabled states in sync.
+
 ## Styling
 
 The styling for the tables is divided in two SASS files, `tabled_core.scss` which compiles to `styles.css` and `tabled_theme.scss` which compiles to `theme.css`.

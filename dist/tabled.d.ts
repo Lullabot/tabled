@@ -30,6 +30,7 @@ declare class Tabled {
     private wrap;
     private applyFade;
     private move;
+    private wireControl;
     private addTableControls;
     private checkConditions;
 }

@@ -34,8 +34,9 @@ class Tabled {
             options.index = Math.floor(Math.random() * 10000);
         }
         if (this.checkConditions(options.table)) {
+            const providedContainer = options.table.closest("." + Selectors.container);
             options.table.classList.add(Selectors.table);
-            this.wrap(options.table);
+            this.wrap(options.table, providedContainer);
             const wrapper = this.getWrapper(options.table);
             wrapper.setAttribute("id", "tabled-n" + options.index);
             this.adjustColumnsWidth(options);
@@ -93,35 +94,40 @@ class Tabled {
             });
         }
     }
-    wrap(table) {
-        const wrapper = document.createElement("div");
-        wrapper.classList.add(Selectors.wrapper);
+    wrap(table, providedContainer) {
+        let wrapper = table.closest("." + Selectors.wrapper);
+        if (!wrapper) {
+            wrapper = document.createElement("div");
+            wrapper.classList.add(Selectors.wrapper);
+            table.parentNode.insertBefore(wrapper, table);
+            wrapper.appendChild(table);
+        }
         wrapper.setAttribute("tabindex", "0");
-        table.parentNode.insertBefore(wrapper, table);
-        wrapper.appendChild(table);
-        const container = document.createElement("div");
-        container.classList.add(Selectors.container);
-        wrapper.parentNode.insertBefore(container, wrapper);
-        container.appendChild(wrapper);
+        if (!providedContainer) {
+            const container = document.createElement("div");
+            container.classList.add(Selectors.container);
+            wrapper.parentNode.insertBefore(container, wrapper);
+            container.appendChild(wrapper);
+        }
     }
     applyFade(table) {
         const wrapper = this.getWrapper(table), container = wrapper.parentNode, previousButton = container.getElementsByClassName(Selectors.previous)[0], nextButton = container.getElementsByClassName(Selectors.next)[0];
         if (wrapper.scrollLeft > 1) {
             container.classList.add(Selectors.fadeLeft);
-            previousButton.removeAttribute("disabled");
+            previousButton === null || previousButton === void 0 ? void 0 : previousButton.removeAttribute("disabled");
         }
         else {
             container.classList.remove(Selectors.fadeLeft);
-            previousButton.setAttribute("disabled", "disabled");
+            previousButton === null || previousButton === void 0 ? void 0 : previousButton.setAttribute("disabled", "disabled");
         }
         const width = wrapper.offsetWidth, scrollWidth = wrapper.scrollWidth;
         if (scrollWidth - wrapper.scrollLeft - width <= 1) {
             container.classList.remove(Selectors.fadeRight);
-            nextButton.setAttribute("disabled", "disabled");
+            nextButton === null || nextButton === void 0 ? void 0 : nextButton.setAttribute("disabled", "disabled");
         }
         else {
             container.classList.add(Selectors.fadeRight);
-            nextButton.removeAttribute("disabled");
+            nextButton === null || nextButton === void 0 ? void 0 : nextButton.removeAttribute("disabled");
         }
     }
     move(table, direction = "previous") {
@@ -159,30 +165,48 @@ class Tabled {
             behavior: "smooth",
         });
     }
+    wireControl(button, table, direction) {
+        button.classList.add("tabled__" + direction);
+        button.setAttribute("aria-label", direction + " table column");
+        button.setAttribute("aria-controls", this.getWrapper(table).getAttribute("id"));
+        button.setAttribute("disabled", "disabled");
+        button.setAttribute("type", "button");
+        button.addEventListener("click", () => {
+            this.move(table, direction);
+        });
+    }
     addTableControls(options) {
         const table = options.table;
-        const navigationContainer = document.createElement("div");
-        navigationContainer.classList.add(Selectors.navigation);
-        ["previous", "next"].forEach((direction) => {
-            let button = document.createElement("button");
-            button.classList.add("tabled__" + direction);
-            button.setAttribute("aria-label", direction + " table column");
-            button.setAttribute("aria-controls", this.getWrapper(table).getAttribute("id"));
-            button.setAttribute("disabled", "disabled");
-            button.setAttribute("type", "button");
-            button.addEventListener("click", () => {
-                this.move(table, direction);
-            });
-            navigationContainer.appendChild(button);
-        });
         const tableContainer = this.getContainer(table);
-        if (tableContainer) {
-            tableContainer.prepend(navigationContainer);
+        if (!tableContainer) {
+            return;
         }
+        let navigationContainer = tableContainer.querySelector("." + Selectors.navigation);
+        const ensureNavigation = () => {
+            if (!navigationContainer) {
+                navigationContainer = document.createElement("div");
+                navigationContainer.classList.add(Selectors.navigation);
+                tableContainer.prepend(navigationContainer);
+            }
+            return navigationContainer;
+        };
+        const directions = [
+            { name: "previous", selector: Selectors.previous },
+            { name: "next", selector: Selectors.next },
+        ];
+        directions.forEach(({ name, selector }) => {
+            let button = tableContainer.querySelector("." + selector);
+            if (!button) {
+                button = document.createElement("button");
+                ensureNavigation().appendChild(button);
+            }
+            this.wireControl(button, table, name);
+        });
         const caption = table.querySelector("caption");
         if (caption) {
             caption.classList.add("visually-hidden");
-            if (!caption.classList.contains("hide-caption")) {
+            const existingCaption = tableContainer.querySelector("." + Selectors.caption);
+            if (!existingCaption && !caption.classList.contains("hide-caption")) {
                 const captionDiv = document.createElement("div");
                 captionDiv.classList.add(Selectors.caption);
                 if (options.captionSide === "bottom") {
@@ -190,12 +214,9 @@ class Tabled {
                 }
                 captionDiv.innerHTML = sanitizeHTML(caption.innerHTML);
                 captionDiv.setAttribute("aria-hidden", "true");
-                const container = this.getContainer(table);
-                if (container) {
-                    options.captionSide === "bottom"
-                        ? container.appendChild(captionDiv)
-                        : container.prepend(captionDiv);
-                }
+                options.captionSide === "bottom"
+                    ? tableContainer.appendChild(captionDiv)
+                    : tableContainer.prepend(captionDiv);
             }
         }
     }

@@ -86,11 +86,17 @@ class Tabled {
 
     // Check if the table met the necessary conditions.
     if (this.checkConditions(options.table)) {
+      // Detect an author-provided container before adding any classes, so that
+      // existing Tabled markup (controls, wrapper, etc.) can be adopted.
+      const providedContainer = options.table.closest(
+        "." + Selectors.container
+      ) as HTMLElement | null;
+
       // Set up attributes
       options.table.classList.add(Selectors.table);
 
       // Add the wrapper
-      this.wrap(options.table);
+      this.wrap(options.table, providedContainer);
       const wrapper: HTMLDivElement = this.getWrapper(options.table);
       wrapper.setAttribute("id", "tabled-n" + options.index);
 
@@ -190,23 +196,30 @@ class Tabled {
   }
 
   /**
-   * Wraps an element with another.
+   * Wraps the table in the structural elements Tabled needs, adopting any that
+   * the author already provided in the markup and creating only what is missing.
    *
    * @param {HTMLTableElement} table
+   * @param {HTMLElement | null} providedContainer An existing ".tabled" root.
    */
-  private wrap(table: HTMLTableElement) {
-    // Wrap the table in the scrollable div
-    const wrapper: HTMLDivElement = document.createElement("div");
-    wrapper.classList.add(Selectors.wrapper);
+  private wrap(table: HTMLTableElement, providedContainer: HTMLElement | null) {
+    // Adopt an existing scrollable wrapper, or create one around the table.
+    let wrapper = table.closest("." + Selectors.wrapper) as HTMLDivElement | null;
+    if (!wrapper) {
+      wrapper = document.createElement("div");
+      wrapper.classList.add(Selectors.wrapper);
+      table.parentNode!.insertBefore(wrapper, table);
+      wrapper.appendChild(table);
+    }
     wrapper.setAttribute("tabindex", "0");
-    table.parentNode!.insertBefore(wrapper, table);
-    wrapper.appendChild(table);
 
-    // Wrap in another div for containing navigation and fading.
-    const container: HTMLDivElement = document.createElement("div");
-    container.classList.add(Selectors.container);
-    wrapper.parentNode!.insertBefore(container, wrapper);
-    container.appendChild(wrapper);
+    // Use the author-provided container, or create one around the wrapper.
+    if (!providedContainer) {
+      const container: HTMLDivElement = document.createElement("div");
+      container.classList.add(Selectors.container);
+      wrapper.parentNode!.insertBefore(container, wrapper);
+      container.appendChild(wrapper);
+    }
   }
 
   /**
@@ -219,18 +232,18 @@ class Tabled {
       container = wrapper.parentNode as HTMLDivElement,
       previousButton = container.getElementsByClassName(
         Selectors.previous
-      )[0] as HTMLButtonElement,
+      )[0] as HTMLButtonElement | undefined,
       nextButton = container.getElementsByClassName(
         Selectors.next
-      )[0] as HTMLButtonElement;
+      )[0] as HTMLButtonElement | undefined;
 
     // Left fading
     if (wrapper.scrollLeft > 1) {
       container.classList.add(Selectors.fadeLeft);
-      previousButton.removeAttribute("disabled");
+      previousButton?.removeAttribute("disabled");
     } else {
       container.classList.remove(Selectors.fadeLeft);
-      previousButton.setAttribute("disabled", "disabled");
+      previousButton?.setAttribute("disabled", "disabled");
     }
 
     // Right fading
@@ -240,10 +253,10 @@ class Tabled {
     // If there is less than a pixel of difference between the table
     if (scrollWidth - wrapper.scrollLeft - width <= 1) {
       container.classList.remove(Selectors.fadeRight);
-      nextButton.setAttribute("disabled", "disabled");
+      nextButton?.setAttribute("disabled", "disabled");
     } else {
       container.classList.add(Selectors.fadeRight);
-      nextButton.removeAttribute("disabled");
+      nextButton?.removeAttribute("disabled");
     }
   }
 
@@ -301,37 +314,79 @@ class Tabled {
   }
 
   /**
-   * Creates and attaches the table navigation.
+   * Wires a navigation button to scroll the table, adding the attributes and
+   * click handler Tabled relies on. Works for both generated and author-provided
+   * buttons.
+   *
+   * @param {HTMLButtonElement} button
+   * @param {HTMLTableElement} table
+   * @param {string} direction ["previous", "next"]
+   */
+  private wireControl(
+    button: HTMLButtonElement,
+    table: HTMLTableElement,
+    direction: string
+  ) {
+    button.classList.add("tabled__" + direction);
+    button.setAttribute("aria-label", direction + " table column");
+    button.setAttribute(
+      "aria-controls",
+      this.getWrapper(table).getAttribute("id")!
+    );
+    button.setAttribute("disabled", "disabled");
+    button.setAttribute("type", "button");
+    button.addEventListener("click", () => {
+      this.move(table, direction);
+    });
+  }
+
+  /**
+   * Sets up the table navigation, adopting any author-provided navigation
+   * container or buttons and creating only the pieces that are missing.
    *
    * @param {TabledOptions} options
    */
   private addTableControls(options: TabledOptions) {
     const table: HTMLTableElement = options.table;
-    const navigationContainer: HTMLDivElement = document.createElement("div");
-    navigationContainer.classList.add(Selectors.navigation);
-
-    // Set up the navigation.
-    ["previous", "next"].forEach((direction) => {
-      let button: HTMLButtonElement = document.createElement("button");
-      button.classList.add("tabled__" + direction);
-      button.setAttribute("aria-label", direction + " table column");
-      button.setAttribute(
-        "aria-controls",
-        this.getWrapper(table).getAttribute("id")!
-      );
-      button.setAttribute("disabled", "disabled");
-      button.setAttribute("type", "button");
-      button.addEventListener("click", () => {
-        this.move(table, direction);
-      });
-
-      navigationContainer.appendChild(button);
-    });
-
     const tableContainer: HTMLDivElement | null = this.getContainer(table);
-    if (tableContainer) {
-      tableContainer.prepend(navigationContainer);
+
+    if (!tableContainer) {
+      return;
     }
+
+    // Reuse an author-provided navigation container, or lazily create one only
+    // when a button needs a home.
+    let navigationContainer = tableContainer.querySelector(
+      "." + Selectors.navigation
+    ) as HTMLDivElement | null;
+
+    const ensureNavigation = (): HTMLDivElement => {
+      if (!navigationContainer) {
+        navigationContainer = document.createElement("div");
+        navigationContainer.classList.add(Selectors.navigation);
+        tableContainer.prepend(navigationContainer);
+      }
+      return navigationContainer;
+    };
+
+    // Adopt existing buttons where present, create the rest.
+    const directions: { name: string; selector: Selectors }[] = [
+      { name: "previous", selector: Selectors.previous },
+      { name: "next", selector: Selectors.next },
+    ];
+
+    directions.forEach(({ name, selector }) => {
+      let button = tableContainer.querySelector(
+        "." + selector
+      ) as HTMLButtonElement | null;
+
+      if (!button) {
+        button = document.createElement("button");
+        ensureNavigation().appendChild(button);
+      }
+
+      this.wireControl(button, table, name);
+    });
 
     // Tweak the caption.
     const caption: HTMLTableCaptionElement | null =
@@ -339,7 +394,11 @@ class Tabled {
 
     if (caption) {
       caption.classList.add("visually-hidden");
-      if (!caption.classList.contains("hide-caption")) {
+      const existingCaption = tableContainer.querySelector(
+        "." + Selectors.caption
+      );
+
+      if (!existingCaption && !caption.classList.contains("hide-caption")) {
         const captionDiv = document.createElement("div");
         captionDiv.classList.add(Selectors.caption);
 
@@ -349,13 +408,10 @@ class Tabled {
 
         captionDiv.innerHTML = sanitizeHTML(caption.innerHTML);
         captionDiv.setAttribute("aria-hidden", "true");
-        const container = this.getContainer(table);
 
-        if (container) {
-          options.captionSide === "bottom"
-            ? container.appendChild(captionDiv)
-            : container.prepend(captionDiv);
-        }
+        options.captionSide === "bottom"
+          ? tableContainer.appendChild(captionDiv)
+          : tableContainer.prepend(captionDiv);
       }
     }
   }
