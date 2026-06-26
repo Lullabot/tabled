@@ -21,8 +21,8 @@
     "start": "parcel docs/examples.html",
     "tsc": "tsc",
     "uglify": "uglifyjs --compress --mangle -o ./dist/tabled.min.js -- ./dist/tabled.js",
-    "sass-themes": "sass ./src/styles/tabled_theme.scss ./dist/theme.css --style compressed",
-    "sass": "sass ./src/styles/tabled_core.scss ./dist/styles.css --style compressed",
+    "sass-themes": "sass --no-source-map ./src/styles/tabled_theme.scss ./dist/theme.css --style compressed",
+    "sass": "sass --no-source-map ./src/styles/tabled_core.scss ./dist/styles.css --style compressed",
     "build": "npm run tsc && npm run sass && npm run sass-themes && npm run uglify",
     "prepack": "npm run build"
   },
