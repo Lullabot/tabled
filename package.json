@@ -1,7 +1,7 @@
 {
   "devDependencies": {
     "sass": "^1.71.1",
-    "typescript": "^6.0.0",
+    "typescript": "^7.0.0",
     "uglify-js": "^3.17.4"
   },
   "name": "@lullabot/tabled",
